@@ -158,9 +158,23 @@ public final class ReciprocalArraySum {
   protected static double parManyTaskArraySum(final double[] input, final int numTasks) {
     double sum = 0;
 
-    // Calcula la suma de los recíprocos de los elementos del arreglo
-    for (int i = 0; i < input.length; i++) {
-      sum += 1 / input[i];
+    ReciprocalArraySumTask[] tasks = new ReciprocalArraySumTask[numTasks];
+
+    for (int i = 0; i < numTasks; i++) {
+      tasks[i] =
+          new ReciprocalArraySumTask(
+              getChunkStartInclusive(i, numTasks, input.length),
+              getChunkEndExclusive(i, numTasks, input.length),
+              input);
+    }
+
+    for (int i = 0; i < numTasks; i++) {
+      tasks[i].fork();
+    }
+
+    for (int i = 0; i < numTasks; i++) {
+      tasks[i].join();
+      sum += tasks[i].getValue();
     }
 
     return sum;
