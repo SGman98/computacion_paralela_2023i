@@ -1,0 +1,14 @@
+{
+  "neoconf": {
+    "plugins": {
+      "lspconfig": {
+        "enabled": true
+      }
+    }
+  },
+  "lspconfig": {
+    "jdtls": {
+      "java.format.enabled": false
+    }
+  }
+}
