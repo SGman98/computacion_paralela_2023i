@@ -96,7 +96,20 @@ public final class StudentAnalytics {
    * @return Nombre más comun de los estudiantes inactivos.
    */
   public String mostCommonFirstNameOfInactiveStudentsParallelStream(final Student[] studentArray) {
-    throw new UnsupportedOperationException();
+    return Arrays.stream(studentArray)
+        .parallel()
+        .filter(s -> !s.checkIsCurrent())
+        .collect(
+            HashMap<String, Integer>::new,
+            (nameCounts, student) ->
+                nameCounts.put(
+                    student.getFirstName(), nameCounts.getOrDefault(student.getFirstName(), 0) + 1),
+            HashMap<String, Integer>::putAll)
+        .entrySet()
+        .parallelStream()
+        .max(Map.Entry.comparingByValue())
+        .get()
+        .getKey();
   }
 
   /**
