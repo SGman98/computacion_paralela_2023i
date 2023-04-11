@@ -1,6 +1,7 @@
 package co.edu.unal.paralela;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,12 @@ public final class StudentAnalytics {
    * @return Edad promedio de los estudiantes registrados
    */
   public double averageAgeOfEnrolledStudentsParallelStream(final Student[] studentArray) {
-    throw new UnsupportedOperationException();
+    return Arrays.stream(studentArray)
+        .parallel()
+        .filter(s -> s.checkIsCurrent())
+        .mapToDouble(s -> s.getAge())
+        .average()
+        .getAsDouble();
   }
 
   /**
