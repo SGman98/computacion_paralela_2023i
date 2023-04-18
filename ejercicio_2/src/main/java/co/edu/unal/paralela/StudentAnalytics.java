@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /** Una clase 'envoltorio' (wrapper) para varios métodos analíticos. */
 public final class StudentAnalytics {
@@ -99,12 +100,7 @@ public final class StudentAnalytics {
     return Arrays.stream(studentArray)
         .parallel()
         .filter(s -> !s.checkIsCurrent())
-        .collect(
-            HashMap<String, Integer>::new,
-            (nameCounts, student) ->
-                nameCounts.put(
-                    student.getFirstName(), nameCounts.getOrDefault(student.getFirstName(), 0) + 1),
-            HashMap<String, Integer>::putAll)
+        .collect(Collectors.groupingBy(Student::getFirstName, Collectors.counting()))
         .entrySet()
         .parallelStream()
         .max(Map.Entry.comparingByValue())
